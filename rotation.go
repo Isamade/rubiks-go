@@ -84,3 +84,79 @@ func TopClockwise(pieces []Piece) []Piece {
 
 	return newState
 }
+
+
+// changeColors is a helper function to rotate colors on a piece
+func changeColorsTopCounterClockwise(colors []string) []string {
+	result := make([]string, len(colors))
+	copy(result, colors)
+
+	temp := result[5]
+	result[5] = result[1]
+	result[1] = result[4]
+	result[4] = result[0]
+	result[0] = temp
+
+	return result
+}
+
+// TopCounterClockwise rotates the top face of the cube counter clockwise
+func TopCounterClockwise(pieces []Piece) []Piece {
+	// Create a deep copy of pieces
+	newState := make([]Piece, len(pieces))
+	for k, v := range pieces {
+		colorsCopy := make([]string, len(v.Colors))
+		copy(colorsCopy, v.Colors)
+		positionCopy := make([]int, len(v.Position))
+		copy(positionCopy, v.Position)
+		newState[k] = Piece{Colors: colorsCopy, Position: positionCopy}
+	}
+
+	// Build the locations matrix for the pieces on top face
+	locationsMatrix := make([][]int, 0)
+	for i := 3; i > 0; i-- {
+		locationsVector := make([]int, 0)
+		for j := 1; j < 4; j++ {
+			locationsVector = append(locationsVector, 9*j-i)
+		}
+		locationsMatrix = append(locationsMatrix, locationsVector)
+	}
+
+	// Create the rotation matrix by first transposing locationsMatrix
+	rotationMatrix := make([][]int, 3)
+	for i := 0; i < 3; i++ {
+		rotationMatrix[i] = make([]int, 3)
+		for j := 0; j < 3; j++ {
+			rotationMatrix[i][j] = locationsMatrix[j][i]
+		}
+	}
+
+	// Complete the rotation matrix by swapping first and third rows
+	rotationMatrix[0], rotationMatrix[2] = rotationMatrix[2], rotationMatrix[0]
+
+	// Update newState based on rotation
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 3; j++ {
+			// Find new position of the piece at locationsMatrix[i][j]
+			var newI, newJ int
+			found := false
+			for m := 0; m < 3 && !found; m++ {
+				for n := 0; n < 3 && !found; n++ {
+					if rotationMatrix[m][n] == locationsMatrix[i][j] {
+						newI, newJ = m, n
+						found = true
+					}
+				}
+			}
+
+			// Update the piece's position by changing colors in newState
+			sourcePiece := pieces[locationsMatrix[i][j]]
+			newState[locationsMatrix[newI][newJ]] = Piece{
+				Colors:   changeColorsTopCounterClockwise(sourcePiece.Colors),
+				Position: pieces[locationsMatrix[newI][newJ]].Position,
+			}
+		}
+	}
+
+	return newState
+}
