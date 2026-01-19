@@ -49,6 +49,8 @@ func main() {
 			newState = CubeState{Pieces: TopClockwise(req.CubeState.Pieces)}
 		case "U'":
 			newState = CubeState{Pieces: TopCounterClockwise(req.CubeState.Pieces)}
+		case "B":
+			newState = CubeState{Pieces: BottomClockwise(req.CubeState.Pieces)}
 		default:
 			http.Error(w, "Unknown move: "+req.Move, http.StatusBadRequest)
 			return
