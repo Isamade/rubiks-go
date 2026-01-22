@@ -14,6 +14,11 @@ type CubeState struct {
 	Pieces []Piece `json:"pieces"`
 }
 
+type ScrambleRequest struct {
+	MovesCount int       `json:"movesCount"`
+	CubeState  CubeState `json:"cubeState"`
+}
+
 // RotationRequest represents the JSON structure for rotation requests
 
 type RotationRequest struct {
@@ -29,6 +34,20 @@ func main() {
 		AllowedMethods:   []string{"POST", "OPTIONS", "GET", "PUT", "DELETE", "PATCH"},
 		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
+	})
+
+	router.HandleFunc("/scramble", func(w http.ResponseWriter, r *http.Request) {
+		var req ScrambleRequest
+		err := json.NewDecoder(r.Body).Decode(&req)
+		if err != nil {
+			http.Error(w, "Invalid JSON", http.StatusBadRequest)
+			return
+		}
+
+		newState := CubeState{Pieces: scrambleCube(req.CubeState.Pieces, req.MovesCount)}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(newState)
 	})
 
 	router.HandleFunc("/rotate", func(w http.ResponseWriter, r *http.Request) {
