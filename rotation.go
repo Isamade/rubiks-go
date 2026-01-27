@@ -36,10 +36,10 @@ func TopClockwise(pieces []Piece) []Piece {
 
 	// Build the locations matrix for the pieces on top face
 	locationsMatrix := make([][]int, 0)
-	for i := 3; i > 0; i-- {
+	for i := -3; i < 0; i++ {
 		locationsVector := make([]int, 0)
 		for j := 1; j < 4; j++ {
-			locationsVector = append(locationsVector, 9*j-i)
+			locationsVector = append(locationsVector, 9*j+i)
 		}
 		locationsMatrix = append(locationsMatrix, locationsVector)
 	}
@@ -114,10 +114,10 @@ func TopCounterClockwise(pieces []Piece) []Piece {
 
 	// Build the locations matrix for the pieces on top face
 	locationsMatrix := make([][]int, 0)
-	for i := 3; i > 0; i-- {
+	for i := -3; i < 0; i++ {
 		locationsVector := make([]int, 0)
 		for j := 1; j < 4; j++ {
-			locationsVector = append(locationsVector, 9*j-i)
+			locationsVector = append(locationsVector, 9*j+i)
 		}
 		locationsMatrix = append(locationsMatrix, locationsVector)
 	}
