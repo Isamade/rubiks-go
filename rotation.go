@@ -268,7 +268,7 @@ func BottomCounterClockwise(pieces []Piece) []Piece {
 
 	// Build the locations matrix for the pieces on bottom face
 	locationsMatrix := make([][]int, 0)
-	for i := 0; i < 3; i++ {
+	for i := 2; i > -1; i-- {
 		locationsVector := make([]int, 0)
 		for j := 0; j < 3; j++ {
 			locationsVector = append(locationsVector, 9*j+i)
@@ -285,10 +285,8 @@ func BottomCounterClockwise(pieces []Piece) []Piece {
 		}
 	}
 
-	// Complete the rotation matrix by swapping first and third columns
-	for i := 0; i < 3; i++ {
-		rotationMatrix[i][0], rotationMatrix[i][2] = rotationMatrix[i][2], rotationMatrix[i][0]
-	}
+	// Complete the rotation matrix by swapping first and third rows
+	rotationMatrix[0], rotationMatrix[2] = rotationMatrix[2], rotationMatrix[0]
 
 	// Update newState based on rotation
 	for i := 0; i < 3; i++ {
