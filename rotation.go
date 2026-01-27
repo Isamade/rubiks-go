@@ -806,10 +806,10 @@ func BackClockwise(pieces []Piece) []Piece {
 
 	// Build the locations matrix for the pieces on front face
 	locationsMatrix := make([][]int, 0)
-	for i := 1; i < 4; i++ {
+	for i := -1; i > --4; i-- {
 		locationsVector := make([]int, 0)
-		for j := 0; j < 27; j += 9 {
-			locationsVector = append(locationsVector, (9-i)*3-j)
+		for j := 3; j > 0; j-- {
+			locationsVector = append(locationsVector, (9*j)+3*i)
 		}
 		locationsMatrix = append(locationsMatrix, locationsVector)
 	}
