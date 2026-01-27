@@ -730,10 +730,10 @@ func FrontCounterClockwise(pieces []Piece) []Piece {
 
 	// Build the locations matrix for the pieces on front face
 	locationsMatrix := make([][]int, 0)
-	for i := 3; i > 0; i-- {
+	for i := 0; i > -3; i-- {
 		locationsVector := make([]int, 0)
-		for j := 0; j < 27; j += 9 {
-			locationsVector = append(locationsVector, 3*i-1+j)
+		for j := 1; j < 4; j++ {
+			locationsVector = append(locationsVector, 9*j + 3*i -1)
 		}
 		locationsMatrix = append(locationsMatrix, locationsVector)
 	}
