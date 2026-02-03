@@ -4,7 +4,7 @@ import (
 	"math/rand/v2"
 )
 
-func scrambleCube(pieces []Piece, movesCount int) []Piece {
+func scrambleCube(pieces []Piece, movesCount int) ([]string, []Piece) {
 	// Create a deep copy of pieces
 	newState := make([]Piece, len(pieces))
 	for k, v := range pieces {
@@ -16,8 +16,12 @@ func scrambleCube(pieces []Piece, movesCount int) []Piece {
 	}
 
 	possibleMoves := [12]string{"U", "U'", "D", "D'", "R", "R'", "L", "L'", "F", "F'", "B", "B'"}
+
+	rotationSequence := make([]string, movesCount)
+
 	for i := 0; i < movesCount; i++ {
 		index := rand.IntN(12)
+		rotationSequence[i] = possibleMoves[index]
 		switch possibleMoves[index] {
 		case "U":
 			newState = TopClockwise(newState)
@@ -45,5 +49,5 @@ func scrambleCube(pieces []Piece, movesCount int) []Piece {
 			newState = BackCounterClockwise(newState)
 		}
 	}
-	return newState
+	return (rotationSequence, newState)
 }

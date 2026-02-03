@@ -44,7 +44,7 @@ func main() {
 			return
 		}
 
-		newState := CubeState{Pieces: scrambleCube(req.CubeState.Pieces, req.MovesCount)}
+		rotationSequence, newState := scrambleCube(req.CubeState.Pieces, req.MovesCount)
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(newState)
